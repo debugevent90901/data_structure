@@ -3,21 +3,22 @@
 
 
 class PyList(list):
-    def __init__(self, content=[], size = 20):
-        self.items = [None]*size
+
+    def __init__(self, content = [], size = 20):
+        self.items = [None] * size
         self.numItems = 0
         self.size = size
         for e in content:
             self.append(e)
 
-    def __contains__(self,item):
+    def __contains__(self, item):
         for i in range(self.numItems):
             if self.items[i] == item:
                 return True
-            return False
+        return False
 
-    def __eq__(self,other):
-        if (type(self) != type(other)):
+    def __eq__(self, other):
+        if type(self) != type(other):
             return False
         if self.numItems != other.numItems:
             return False
@@ -26,36 +27,36 @@ class PyList(list):
                 return False
         return True
 
-    def __setitem__(self,index,val):
+    def __setitem__(self, index, val):
         if index >= 0 and index <= self.numItems-1:
             self.items[index] = val
             return
         raise IndexError("Pylist assignment index out of range.")
 
-    def __getitem__(self,index):
+    def __getitem__(self, index):
         if index >= 0 and index <= self.numItems-1:
             return self.items[index]
         raise IndexError("Pylist index out of range.")
 
-    def append(self,item):
+    def append(self, item):
         if self.numItems == self.size:
             self.allocate()
         self.items[self.numItems] = item
         self.numItems += 1
 
-    def __add__(self,other):
-        result = PyList(size=self.numItems+other.numItems)
+    def __add__(self, other):
+        result = PyList(size = self.numItems + other.numItems)
         for i in range(self.numItems):
             result.append(self.items[i])
         for i in range(other.numItems):
             result.append(self.items[i])
         return result
 
-    def insert(self,i,x):
+    def insert(self, i, x):
         if self.numItems == self.size:
             self.allocate()
         if i < self.numItems:
-            for j in range(self.numItems-1,i,-1):
+            for j in range(self.numItems-1, i, -1):
                 self.items[j+1] = self.items[j]
             self.items[i] = x
             self.numItems += 1
@@ -63,12 +64,12 @@ class PyList(list):
             self.append(x)
 
     def delete(self,index):
-        if (self.numItems == self.size/4):
+        if (self.numItems == self.size / 4):
             self.deallocate()
         if index >= self.numItems:
             raise IndexError("PyList index out of range.")
         else:
-            for i in range(index,self.numItems-1):
+            for i in range(index, self.numItems-1):
                 self.items[i] = self.items[i+1]
             self.numItems -= 1
             return
@@ -82,35 +83,23 @@ class PyList(list):
             self.size = newlength
 
     def deallocate(self):
-        newlength = int(self.size / 2)
+        newlength = self.size / 2
         newList = [None] * newlength
         for i in range(self.numItems):
             newList[i] = self.items[i]
         self.items = newList
         self.size = newlength
 
-    def delete_last(self,k):
-        if k>self.numItems:
-            self.numItems = 0
-            self.size = 1
-            self.items = [None]*self.size
-            return
-        else:
-            rest = self.numItems - k
-            self.numItems = rest
-            while (self.numItems <= int(self.size/4)):
-                self.deallocate()
-            return
-        return
-
-
-if __name__ == "__main__":
+# code to test the structure
+def main():
     a = list(range(128))
     pylist = PyList(a,128)
     for i in range(pylist.numItems):
         print(pylist.items[i])
-    print("-------")
-    pylist.delete_last(125)
+    print("##########")
     for i in range(pylist.numItems):
         print(pylist.items[i])
     print(pylist.size)
+
+if __name__ == "__main__":
+    main()
