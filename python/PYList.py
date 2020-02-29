@@ -2,9 +2,9 @@
 # main.py
 
 
-class PyList(list):
+class PYList(list):
 
-    def __init__(self, content = [], size = 20):
+    def __init__(self, content=[], size = 20):
         self.items = [None] * size
         self.numItems = 0
         self.size = size
@@ -18,7 +18,7 @@ class PyList(list):
         return False
 
     def __eq__(self, other):
-        if type(self) != type(other):
+        if (type(self) != type(other)):
             return False
         if self.numItems != other.numItems:
             return False
@@ -45,26 +45,26 @@ class PyList(list):
         self.numItems += 1
 
     def __add__(self, other):
-        result = PyList(size = self.numItems + other.numItems)
+        result = PYList(size = self.numItems + other.numItems)
         for i in range(self.numItems):
             result.append(self.items[i])
         for i in range(other.numItems):
-            result.append(self.items[i])
+            result.append(other.items[i])
         return result
 
     def insert(self, i, x):
         if self.numItems == self.size:
             self.allocate()
         if i < self.numItems:
-            for j in range(self.numItems-1, i, -1):
+            for j in range(self.numItems-1, i-1, -1):
                 self.items[j+1] = self.items[j]
             self.items[i] = x
             self.numItems += 1
         else:
             self.append(x)
 
-    def delete(self,index):
-        if (self.numItems == self.size / 4):
+    def delete(self, index):
+        if self.numItems == self.size / 4:
             self.deallocate()
         if index >= self.numItems:
             raise IndexError("PyList index out of range.")
@@ -72,15 +72,14 @@ class PyList(list):
             for i in range(index, self.numItems-1):
                 self.items[i] = self.items[i+1]
             self.numItems -= 1
-            return
 
     def allocate(self):
         newlength = 2 * self.size
         newList = [None] * newlength
         for i in range(self.numItems):
             newList[i] = self.items[i]
-            self.items = newList
-            self.size = newlength
+        self.items = newList
+        self.size = newlength
 
     def deallocate(self):
         newlength = self.size / 2
@@ -90,16 +89,13 @@ class PyList(list):
         self.items = newList
         self.size = newlength
 
+
+
 # code to test the structure
 def main():
-    a = list(range(128))
-    pylist = PyList(a,128)
-    for i in range(pylist.numItems):
-        print(pylist.items[i])
-    print("##########")
-    for i in range(pylist.numItems):
-        print(pylist.items[i])
-    print(pylist.size)
+    a = range(7)
+    pylist = PYList(a,15)
+    
 
 if __name__ == "__main__":
     main()
