@@ -4,7 +4,7 @@
 
 import numpy as np
 
-class PYList(list):
+class PyList(list):
 
     def __init__(self, content = [], size = 20):
         self.items = [None] * size
@@ -47,7 +47,7 @@ class PYList(list):
         self.numItems += 1
 
     def __add__(self, other):
-        result = PYList(size = self.numItems + other.numItems)
+        result = PyList(size = self.numItems + other.numItems)
         for i in range(self.numItems):
             result.append(self.items[i])
         for i in range(other.numItems):
@@ -114,8 +114,8 @@ class PYList(list):
             length = self.numItems
             length1 = length / 2
             length2 = length - length1
-            list1 = PYList(self.items[0:length1], length1)
-            list2 = PYList(self.items[length1:self.numItems], length2)
+            list1 = PyList(self.items[0:length1], length1)
+            list2 = PyList(self.items[length1:self.numItems], length2)
             return g(list1.src(e, f, g), list2.src(e, f, g))
 
 class DoubleStack:
@@ -185,7 +185,7 @@ class DoubleStack:
 def testSRC():
     print("The test of src.")
     a = range(50)
-    pylist = PYList(a, 128)
+    pylist = PyList(a, 128)
 
     print("############## This is test 1 ##############")
     e = 0
@@ -195,8 +195,8 @@ def testSRC():
     print(ans)
 
     print("############## This is test 2 ##############")
-    e = PYList([], 0)
-    f = lambda x : PYList([x+5], 1)
+    e = PyList([], 0)
+    f = lambda x : PyList([x+5], 1)
     g = lambda x, y : x + y
     ans2 = pylist.src(e, f, g)
     print(ans2.items)
@@ -204,8 +204,8 @@ def testSRC():
     print("the numItems of the list %d" %ans2.numItems)
 
     print("############## This is test 3 ##############")
-    e = PYList([], 0)
-    f = lambda x : PYList([x], 1) if x > 10 else PYList([], 0)
+    e = PyList([], 0)
+    f = lambda x : PyList([x], 1) if x > 10 else PyList([], 0)
     g = lambda x, y : x + y
     ans3 = pylist.src(e, f, g)
     print(ans3.items)
@@ -234,7 +234,7 @@ def testDoubleStack():
 def testPYList():
     print("The test of PYList.")
     content = range(15)
-    newlist = PYList(content, len(content))
+    newlist = PyList(content, len(content))
     for i in range(15):
         newlist.append(666)
     newlist.append(1000)
@@ -246,8 +246,8 @@ def testPYList():
     print("the size is %d"%newlist.size)
 
 def main():
-    #testPYList()
-    #testSRC()
+    testPYList()
+    testSRC()
     testDoubleStack()
 
 if __name__ == "__main__":
