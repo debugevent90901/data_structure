@@ -88,3 +88,63 @@ class PyList(list):
             newList[i] = self.items[i]
         self.items = newList
         self.size = newlength
+
+    def selectionSort(self):
+        for i in range(self.numItems-1):
+            minIndex = i
+            for j in range(i+1, self.numItems):
+                if self.items[minIndex] > self.items[j]:
+                    minIndex = j
+            if i == minIndex:
+                continue
+            else:
+                self.items[i], self.items[minIndex] = self.items[minIndex], self.items[i]
+
+    def bubbleSort(self):
+        while True:
+            is_swaped = 0
+            for i in range(self.numItems):
+                if self.items[i] > self.items[i+1] and self.items[i+1] != None:
+                    self.items[i], self.items[i+1] = self.items[i+1], self.items[i]
+                    is_swaped += 1
+            if is_swaped == 0:
+                break
+
+    def insertionSort(self):
+        for i in range(self.numItems):
+            left, right = 0, i-1
+            tmp = self.items[i]
+            while left <= right:
+                mid = left + (right - left) / 2
+                if self.items[mid] > tmp:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            for j in range(i-1, left-1, -1):
+                self.items[j+1] = self.items[j]
+            self.items[left] = tmp
+
+
+a = PyList([2, 45, 11, 3, 67, 103, 34, 22, 1])
+b = PyList([2, 45, 11, 3, 67, 103, 34, 22, 1])
+c = PyList([2, 45, 11, 3, 67, 103, 34, 22, 1])
+a.bubbleSort()
+b.selectionSort()
+c.insertionSort()
+print(a.items)
+print(b.items)
+print(c.items)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
