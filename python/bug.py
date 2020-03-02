@@ -69,23 +69,22 @@ while ptr != a.first:
 	print(ptr.item)
 	ptr = ptr.getNext()
 print("114514114514114514114514114514114514")
-print(a.numItems)
-print("114514114514114514114514114514114514")
-print(a.locate(1).item)
-print("114514114514114514114514114514114514")
-'''
+
 a.insertList(b.first.getNext(), b.first.getPrevious(), 2)
 ptrr = a.first.getNext()
 while ptrr != a.first:
 	print(ptrr.item)
 	ptrr = ptrr.getNext()
+
 print("114514114514114514114514114514114514")
+
+# 接下来开始报错
 a.splice(3, b, 2, 4)
 ptrrr = a.first.getNext()
 while ptrrr != a.first:
 	print(ptrrr.item)
 	ptrrr = ptrrr.getNext()
-'''
+
 
 
 

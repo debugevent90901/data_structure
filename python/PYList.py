@@ -101,6 +101,14 @@ class PyList(list):
                 self.items[i], self.items[minIndex] = self.items[minIndex], self.items[i]
 
     def bubbleSort(self):
+        for i in range(self.numItems-1):
+            for j in range(self.numItems-1-i):
+                if self.items[j] > self.items[j+1]:
+                    self.items[j], self.items[j+1] = self.items[j+1], self.items[j]
+
+    # another bubbleSort
+    '''
+    def bubbleSort(self):
         while True:
             is_swaped = 0
             for i in range(self.numItems):
@@ -109,9 +117,10 @@ class PyList(list):
                     is_swaped += 1
             if is_swaped == 0:
                 break
+    '''
 
     def insertionSort(self):
-        for i in range(self.numItems):
+        for i in range(1, self.numItems):
             left, right = 0, i-1
             tmp = self.items[i]
             while left <= right:

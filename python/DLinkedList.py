@@ -69,6 +69,66 @@ class DLinkedList:
 			if is_swaped == 0:
 				break
 
+	def selectionSort(self):
+		firstNode = self.first.getNext()
+		lastNode = self.first.getPrevious()
+		outlast = self.first
+		self.first.setNext(self.first)
+		self.first.setPrevious(self.first)
+		counter = self.numItems
+		while counter != 0:
+			location = self.getMinimum(firstNode, lastNode)
+			self.cut(firstNode, lastNode, location)
+			self.addLocation(location, outlast)
+			counter -= 1
+
+	def getMinimum(self, first, last):
+		minimum = first.getItem()
+		cursor = first
+		location = first
+		while cursor != last:
+			cursor = cursor.getNext()
+			item = cursor.getItem()
+			if item < minimum:
+				minimum = item
+				location = cursor
+		return location
+	
+	def cut(self, first, last, location):
+		if location = first:
+			first = location
+		else:
+			if location = last:
+				last = location
+			else:
+				prev = location.getPrevious()
+				next = location.getNext()
+				prev.setNext(next)
+				next.setPrevious(prev)
+
+	def addLocation(self,location, outlast):
+		location.setPrevious(outlast)
+		location.setNext(self.first)
+		outlast.setNext(location)
+		outlast = location
+		self.first.setPrevious(location)
+
+
+
+
+a = DLinkedList(['a', 'b', 'c', 'd', 'e'])
+b = DLinkedList(['ass', 'pee', 'shit', 'fuck', 'dick'])
+
+ptr = a.first.getNext()
+while ptr != a.first:
+	print(ptr.item)
+	ptr = ptr.getNext()
+print("114514114514114514114514114514114514")
+a.selectionSort()
+ptr = a.first.getNext()
+while ptr != a.first:
+	print(ptr.item)
+	ptr = ptr.getNext()
 
 
 
