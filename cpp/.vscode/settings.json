@@ -18,5 +18,19 @@
         "/usr/local/opt/opencv@3/include"
         // "/usr/local/Cellar/opencv/4.0.1/include/opencv4"
         // "/usr/local/include/opencv4"
-    ]
+    ],
+    "files.associations": {
+        "iostream": "cpp",
+        "__bit_reference": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "ios": "cpp",
+        "iterator": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp"
+    }
 }

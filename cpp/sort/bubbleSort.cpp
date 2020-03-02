@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-template <typename T> //整数或浮点数皆可使用,若要使用类(class)或结构体(struct)时必须重载大于(>)运算符
+template <typename T>
 void bubble_sort(T arr[], int len)
 {
     int i, j;
