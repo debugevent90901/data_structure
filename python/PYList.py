@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 class PyList(list):
 
     def __init__(self,contents = [], size = 20):
@@ -44,6 +43,10 @@ class PyList(list):
         for i in range(other.numItems):
             result.append(other.items[i])
         return result
+
+    def printList(self):
+        print("The list has size %d and %d items" %(self.size, self.numItems))
+        print(self.items)
     
     def append(self, item):
         if self.numItems == self.size:
@@ -100,15 +103,14 @@ class PyList(list):
             else:
                 self.items[i], self.items[minIndex] = self.items[minIndex], self.items[i]
 
-    def bubbleSort(self):
+    def bubbleSort1(self):
         for i in range(self.numItems-1):
             for j in range(self.numItems-1-i):
                 if self.items[j] > self.items[j+1]:
                     self.items[j], self.items[j+1] = self.items[j+1], self.items[j]
 
     # another bubbleSort
-    '''
-    def bubbleSort(self):
+    def bubbleSort2(self):
         while True:
             is_swaped = 0
             for i in range(self.numItems):
@@ -117,9 +119,9 @@ class PyList(list):
                     is_swaped += 1
             if is_swaped == 0:
                 break
-    '''
 
-    def insertionSort(self):
+    # with binary search
+    def insertionSort_b(self):
         for i in range(1, self.numItems):
             left, right = 0, i-1
             tmp = self.items[i]
@@ -133,16 +135,126 @@ class PyList(list):
                 self.items[j+1] = self.items[j]
             self.items[left] = tmp
 
+    # without binary search
+    def insertionSort1(self):
+        for i in range(self.numItems):
+            key = self.items[i]
+            j = i - 1
+            while j >= 0 and key < self.items[j]:
+                self.items[j + 1] = self.items[j]
+                j -= 1
+            self.items[j + 1] = key
+    
+    # another version
+    def insertionSort2(self):
+        n = self.numItems
+        if n == 1: 
+            return self
+        for i in range(1, n):
+            for j in range(i, 0, -1):
+                if self.items[j] < self.items[j-1]:
+                    self.items[j], self.items[j-1] = self.items[j-1], self.items[j]
+                else:
+                    break
 
-a = PyList([2, 45, 11, 3, 67, 103, 34, 22, 1])
-b = PyList([2, 45, 11, 3, 67, 103, 34, 22, 1])
+    def mergeSort(self, front = 0, end = None, is_thr = True, parameter = 10, method = insertionSort_b):
+        if end == None:
+            end = self.numItems - 1
+        if is_thr == True and ((end - front + 1) <= parameter):
+            method(self)
+        else:
+            mid = front + (end - front) / 2
+            self.mergeSort(front, mid)
+            self.mergeSort(mid+1, end)
+            self.merge(front, mid, end)
+
+    def merge(self, front, mid, end):
+        LeftSubArray = PyList(self.items[front:mid+1])
+        RightSubArray = PyList(self.items[mid+1:end+1])
+        idxLeft, idxRight = 0, 0
+        LeftSubArray.append('inf')
+        RightSubArray.append('inf')
+        for i in range(front, end+1):
+            if LeftSubArray[idxLeft] < RightSubArray[idxRight]:
+                self.items[i] = LeftSubArray[idxLeft]
+                idxLeft += 1
+            else:
+                self.items[i] = RightSubArray[idxRight]
+                idxRight += 1  
+
+    def qSort(self):
+        if self.numItems <= 1:
+            return self
+        pivot = self.items[0]
+        list1 = PyList([], self.numItems)
+        listp = PyList([], self.numItems)
+        list2 = PyList([], self.numItems)
+        for i in range(self.numItems):
+            if self.items[i] < pivot:
+                list1.append(self.items[i])
+            else:
+                if self.items[i] == pivot:
+                    listp.append(self.items[i])
+                else:
+                    list2.append(self.items[i])
+        slist1 = list1.quickSort()
+        slist2 = list2.quickSort()
+        return slist1 + listp + slist2
+
+    def quickSort(self, first = 0, last = None):
+        if last == None:
+            last = self.numItems - 1
+        if first >= last:
+            return
+        pivit = self.items[first]
+        low, high = first, last
+        while low < high:
+            while low < high and self.items[high] >= pivit:
+                high -= 1
+            self.items[low] = self.items[high]
+            while low < high and self.items[low] < pivit:
+                low += 1
+            self.items[high] = self.items[low]
+        self.items[low] = pivit
+        self.quickSort(first, low-1)
+        self.quickSort(low+1, last)
+
+    def radixSort(self, numdigits = 2, digits = None):
+        if digits == None:
+            digits = self.numItems
+        sortedlist = self
+        for i in range(numdigits):
+            print("%d digit" %i)
+            sortedlist = sortedlist.Ksort(i, digits)
+        return sortedlist
+
+    def Ksort(self, round, digits):
+        bucket = PyList([])
+        for k in range(digits):
+            newlist = PyList([], self.numItems)
+            bucket.append(newlist)
+        for i in range(self.numItems):
+            item = self.items[i]
+            item1 = item // (digits ** round) % digits
+            print("%d is placed at position %d" %(item, item1))
+            bucket[item1].append(item)
+        result = bucket[0]
+        for k in range(digits - 1):
+            result = result + bucket[k+1]
+        return result
+
+a = PyList([112, 345, 711, 300, 647, 103, 394, 212, 139])
+asss = PyList([15, 21])
+b = PyList([45, 2, 11, 3, 67, 103, 34, 22, 1])
 c = PyList([2, 45, 11, 3, 67, 103, 34, 22, 1])
-a.bubbleSort()
-b.selectionSort()
-c.insertionSort()
-print(a.items)
-print(b.items)
-print(c.items)
+d = PyList([2, 45, 11, 3, 67, 103, 34, 22, 1])
+
+#a.bubbleSort1()
+ass = asss.radixSort()
+print("after sorting")
+#a.printList()
+ass.printList()
+
 
 
 

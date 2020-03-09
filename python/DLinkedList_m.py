@@ -37,6 +37,7 @@ class DLinkedList:
         for i in range(self.numItems):
             nodes.append(str(tmp.item))
             tmp = tmp.next
+        print("The DLinkedList has %d items" %self.numItems)
         print(' <-> '.join(nodes))
 
     def append(self, item):
@@ -49,18 +50,28 @@ class DLinkedList:
     def locate(self, index):
         if index >= 0 and index < self.numItems:
             cursor = self.first.getNext() 
-            for _ in range(index):
+            for i in range(index):
                 cursor = cursor.getNext() 
             return cursor
         raise IndexError("DLinkedList index out of range")
-        
-    def splice(self, index, other, index1, index2):
+
+    def splice(self, index, other, index1, index2, insert_en = True):
         if index1 <= index2:
-            begin = other.locate(index1)
-            end = other.locate(index2) 
-            self.insertList(begin, end, index)
-            self.numItems += index2 - index1 + 1
-            
+            if insert_en:
+                begin = other.locate(index1)
+                end = other.locate(index2)
+                self.insertList(begin, end, index)
+                self.numItems += index2 - index1 + 1
+            # If there is no insertion, then cut the self list by index1 and index2
+            else:
+                begin = self.locate(index1)
+                end = self.locate(index2)
+                self.first.setPrevious(end)
+                self.first.setNext(begin) 
+                begin.setPrevious(self.first)
+                end.setNext(self.first)
+                self.numItems = index2 - index1 + 1
+
     def insertList(self, begin, end, index): 
         address = self.locate(index) 
         successor = address.getNext() 
@@ -68,57 +79,36 @@ class DLinkedList:
         end.setNext(successor) 
         address.setNext(begin) 
         successor.setPrevious(end)
-        
-    # in-place
-    def selectionSort(self):
-        firstNode = self.first.getNext()
-        lastNode = self.first.getPrevious()
-        self.first.setNext(self.first)
-        self.first.setPrevious(self.first)
-        counter = self.numItems
-        outlast = self.first
-        while counter != 0:
-            location = self.getMinimum(firstNode,lastNode)
-            if location == firstNode:
-                firstNode = location.getNext()
-            else:
-                if location == lastNode:
-                    lastNode = location.getPrevious()
-                else:
-                    self.cut(firstNode,lastNode,location)
-            self.addLocation(outlast,location)
-            outlast = location
-            counter -= 1
-            
-    # getMinimum() determines the node with the minimum item
-    def getMinimum(self, first, last):  
-        minimum = first.getItem()
-        cursor = first
-        location = first
-        while cursor != last:
-            cursor = cursor.getNext()
-            item = cursor.getItem()
-            if item < minimum:
-                minimum = item
-                location = cursor
-        return location
-    
-    #cut() deletes the node with the minimum item from the inlist:
-    #location is actually the min node that you found
-    def cut(self, first, last, location):      
-        prev = location.getPrevious()
-        next = location.getNext()
-        prev.setNext(next)
-        next.setPrevious(prev)
-        
-    # addLocation() adds the node with the minimum item to the outlist
-    def addLocation(self, outlast, location):
-        location.setPrevious(outlast)
-        location.setNext(self.first)
-        outlast.setNext(location)
-        self.first.setPrevious(location)
 
-    # in-place
+    def bubbleSort(self):
+		while True:
+			is_swaped = 0
+			ptr = self.first.getNext()
+			while ptr != self.first:
+				if ptr.item > ptr.getNext().item and ptr.getNext().item != None:
+					ptr.item, ptr.getNext().item = ptr.getNext().item, ptr.item
+					is_swaped += 1
+				ptr = ptr.getNext()
+			if is_swaped == 0:
+				break
+
+    def selectionSort(self):
+		cursor1 = self.first.getNext()
+		while cursor1.getNext() != self.first:
+			minNode = cursor1
+			cursor2 = cursor1.getNext()
+			while cursor2 != self.first:
+				if minNode.getItem() > cursor2.getItem():
+					minNode = cursor2
+				cursor2 = cursor2.getNext()
+			if cursor1 == minNode:
+				cursor1 = cursor1.getNext()
+			else:
+				tmp = cursor1.getItem()
+				cursor1.setItem(minNode.getItem())
+				minNode.setItem(tmp)
+				cursor1 = cursor1.getNext()
+
     def insertionSort(self):
         cursor = self.first.getNext()
         self.first.setNext(self.first)
@@ -128,15 +118,13 @@ class DLinkedList:
             cursor1 = cursor.getNext() 
             self.addout(cursor)
             cursor = cursor1
-    
-    # no need two conditions "cursor2 != self.first"
-    # None <= evenything is True
+        
     def addout(self, cursor):
         cursor2 = self.first.getNext()
-        while cursor2 != self.first and cursor2.getItem() < cursor.getItem() and cursor2.getNext() != self.first:
+        while cursor2.getItem() < cursor.getItem() and cursor2.getNext() != self.first:
             cursor2 = cursor2.getNext()
         # insert before cursor2
-        if cursor2 != self.first and cursor2.getItem() >= cursor.getItem(): 
+        if cursor2.getItem() >= cursor.getItem(): 
             previous = cursor2.getPrevious()
             previous.setNext(cursor)
             cursor.setNext(cursor2)
@@ -148,7 +136,6 @@ class DLinkedList:
             cursor.setNext(self.first)
             cursor.setPrevious(cursor2)
             self.first.setPrevious(cursor)
-
 
     def mergeSort(self, threshold):
         if self.numItems <= threshold:
@@ -212,15 +199,3 @@ a.printList()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    

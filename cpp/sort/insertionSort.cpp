@@ -1,7 +1,6 @@
 #include <iostream>
 using namespace std;
 
-/*
 // without binary search
 template <typename T>
 void insertion_sort(T arr[], int len)
@@ -18,8 +17,9 @@ void insertion_sort(T arr[], int len)
         arr[j + 1] = key;
     }
 }
-*/
 
+
+/*
 // with binary search
 template <typename T>
 void insertion_sort(T arr[], int len)
@@ -41,6 +41,7 @@ void insertion_sort(T arr[], int len)
         arr[left] = tmp;
     }
 }
+*/
 
 int main()
 {
