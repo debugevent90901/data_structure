@@ -200,27 +200,3 @@ class DLinkedList:
                     firstNode = firstNode.getNext()
             count += 1
             current = current.getNext()
-
-
-a = DLinkedList([111, 12, 33, 1, 6789, 8964, 31, 8, 5, 20, 0])
-a.mergeSort(3)
-a.printList()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    

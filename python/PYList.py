@@ -219,9 +219,7 @@ class PyList(list):
         self.quickSort(first, low-1)
         self.quickSort(low+1, last)
 
-    def radixSort(self, numdigits = 2, digits = None):
-        if digits == None:
-            digits = self.numItems
+    def radixSort(self, numdigits = 5, digits = 10):
         sortedlist = self
         for i in range(numdigits):
             print("%d digit" %i)
@@ -242,30 +240,5 @@ class PyList(list):
         for k in range(digits - 1):
             result = result + bucket[k+1]
         return result
-
-a = PyList([112, 345, 711, 300, 647, 103, 394, 212, 139])
-asss = PyList([15, 21])
-b = PyList([45, 2, 11, 3, 67, 103, 34, 22, 1])
-c = PyList([2, 45, 11, 3, 67, 103, 34, 22, 1])
-d = PyList([2, 45, 11, 3, 67, 103, 34, 22, 1])
-
-#a.bubbleSort1()
-ass = asss.radixSort()
-print("after sorting")
-#a.printList()
-ass.printList()
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
