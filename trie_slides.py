@@ -45,13 +45,30 @@ class Trie:
             key = item.pop(0)
             return Trie.__contains(node.follows, item)
         return Trie.__contains(node.next, item)
+    
+    def print_trie(self, root, level_f=0):
+        if root is None:
+            return
+        if root.item != '#':
+            print(root.item, '-', end='')
+        else:
+            print(root.item, end='')
+        self.print_trie(root.follows, level_f + 1)
+        if root.next is not None:
+            print('\n')
+            str_sp = ' ' * level_f * 3
+            print(str_sp + '|')
+            print(str_sp, end='')
+        self.print_trie(root.next, level_f)
+        return
 
 t = Trie()
-
 t.insert(["a", "s", "s"])
-'''
 t.insert(["f", "u", "c", "k"])
 t.insert(["b", "i", "t", "c", "h"])
+t.insert(["a", "s", "s", "h", "o", "l", "e"])
+t.print_trie(t.start)
 '''
 print(["a", "s", "s"] in t)
 print(["c", "o", "m", "m", "i", "e"] in t)
+'''

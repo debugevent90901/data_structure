@@ -2,6 +2,7 @@
 
 # only __add method changed
 # any other thing remain the same as hashset.py
+# 其他所以和slides上不一样的都以slides为准
 
 class HashSet:
 
@@ -37,6 +38,7 @@ class HashSet:
             if location < 0 and type(items[index]) == HashSet.__Placeholder:
                 # check if we find a free block
                 location = index
+                # 这个break应该挺好的
                 break
             if flag < 0:
                 # swap the items
