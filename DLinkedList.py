@@ -7,7 +7,7 @@
 
 class DLinkedList:
     class __Node:
-        def __init__(self, item, next=None, previous=None):
+        def __init__(self, item=None, next=None, previous=None):
             self.item = item
             self.next = next
             self.previous = previous
@@ -37,6 +37,18 @@ class DLinkedList:
         self.first.setPrevious(self.first)
         for e in contents:
             self.append(e)
+    
+    def __add__(self, other):
+        result = DLinkedList()
+        cursor = self.first.next
+        while cursor != self.first:
+            result.append(cursor.item)
+            cursor = cursor.next
+        cursor = other.first.next
+        while cursor != other.first:
+            result.append(cursor.item)
+            cursor = cursor.next
+        return result
 
     def printList(self):
         tmp = self.first.next
@@ -210,8 +222,7 @@ class DLinkedList:
             cursor.setNext(self.first)
             cursor.setPrevious(cursor2)
             self.first.setPrevious(cursor)
-
-
+    
 ####################### mergeSort ############################
 
 # bugs in slide code, slightly modified
@@ -266,3 +277,105 @@ class DLinkedList:
                     firstNode = firstNode.getNext()
             count += 1
             current = current.getNext()
+    
+    ############### another version of merge sort contributed by zzb
+    def helper_split(self):
+        index = self.numItems//2
+        cursor = self.locate(index)
+        lastNode1 = cursor.getPrevious()
+        lastNode2 = self.first.getPrevious()
+        self.first.setPrevious(lastNode1)
+        lastNode1.setNext(self.first)
+        secondList = DLinkedList([])
+        secondList.first.setNext(cursor)
+        cursor.setPrevious(secondList.first)
+        lastNode2.setNext(secondList.first)
+        secondList.first.setPrevious(lastNode2)
+        temp = self.numItems
+        self.numItems = index
+        secondList.numItems = temp - index
+        return secondList
+
+    def MergeSort(self):
+        if self.numItems <= 4:
+            self.bubbleSort()
+        else:
+            secondList = self.helper_split()
+            self.MergeSort()
+            secondList.MergeSort()
+            self.Merge(secondList)
+            del secondList
+        return
+
+    def Merge(self, secondList):
+        total_length = self.numItems + secondList.numItems
+        firstNode = self.first.getNext()
+        secondNode = secondList.first.getNext()
+        dummyNode = self.__Node()
+        head = dummyNode
+        while firstNode != self.first and secondNode != secondList.first:
+            if firstNode.getItem() < secondNode.getItem():
+                dummyNode.setNext(firstNode)
+                firstNode.setPrevious(dummyNode)
+                firstNode = firstNode.getNext()
+            else:
+                dummyNode.setNext(secondNode)
+                secondNode.setPrevious(dummyNode)
+                secondNode = secondNode.getNext()
+            dummyNode = dummyNode.getNext()
+        if firstNode == self.first:
+            dummyNode.setNext(secondNode)
+            secondNode.setPrevious(dummyNode)
+            while secondNode != secondList.first:
+                secondNode = secondNode.getNext()
+            secondNode.getPrevious().setNext(self.first)
+            self.first.setPrevious(secondNode.getPrevious())
+        elif secondNode == secondList.first:
+            dummyNode.setNext(firstNode)
+            firstNode.setPrevious(dummyNode)
+        self.first.setNext(head.getNext())
+        head.getNext().setPrevious(self.first)
+        del head
+        self.numItems = total_length
+        
+    def qsort(self):
+        if self.numItems <= 1:
+            return self
+        pivot = self.first.next.item
+        list1 = DLinkedList()
+        listp = DLinkedList()
+        list2 = DLinkedList()
+        current = self.first.next
+        while current != self.first:
+            if current.item < pivot:
+                list1.append(current.item)
+            else:
+                if current.item == pivot:
+                    listp.append(current.item)
+                else:
+                    list2.append(current.item)
+            current = current.next
+        slist1 = list1.qsort()
+        slist2 = list2.qsort()
+        return slist1 + listp + slist2
+    
+    def radixSort(self, numdigits, digits):
+        sortedlist = self
+        for i in range(numdigits):
+            sortedlist = sortedlist.Ksort(i, digits)
+        return sortedlist
+
+    def Ksort(self, round, digits):
+        bucket = [None] * digits
+        for i in range(digits):
+            bucket[i] = DLinkedList()
+        cursor = self.first.next
+        while cursor != self.first:
+            item = cursor.item
+            item1 = item // (digits ** round) % digits
+            bucket[item1].append(item)
+            cursor = cursor.next
+        result = bucket[0]
+        for k in range(digits-1):
+            result = result + bucket[k+1]
+        return result

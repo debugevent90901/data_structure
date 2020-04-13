@@ -22,7 +22,12 @@ class HashSet:
                 return True
             index = (index + 1) % len(self.items)
         return False
-    
+        
+    def __iter__(self):
+        for i in range(len(self.items)):
+            if self.items[i] != None and type(self.items[i]) != HashSet.__Placeholder:
+                yield self.items[i]
+
     def delete(self, item):
         if HashSet.__remove(item, self.items):
             self.numItems -= 1
