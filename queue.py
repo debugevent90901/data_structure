@@ -59,10 +59,3 @@ class Fifo:
         self.first = 0
         self.last = length - 1
         self.size = newlength
-
-a = Fifo()
-for i in range(30):
-    a.pushback(i)
-while not a.isEmpty():
-    a.popfront()
-    print(a.items)
