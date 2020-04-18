@@ -241,3 +241,128 @@ class PyList(list):
             result = result + bucket[k + 1]
         return result
 
+class PyList_NonList:
+    def __init__(self, contents=[], size=20):
+        self.items = [None] * size
+        self.numItems = 0
+        self.size = size
+        for e in contents:
+            self.append(e)
+
+    def __setitem__(self, index, val):
+        if index >= 0 and index < self.numItems:
+            self.items[index] = val
+            return
+        raise IndexError("PyList assignment index out of range")
+
+    def __getitem__(self, index):
+        if index >= 0 and index < self.numItems:
+            return self.items[index]
+        raise IndexError("PyList index out of range")
+
+    def append(self, item):
+        if self.numItems == self.size:
+            self.allocate()
+        self.items[self.numItems] = item
+        self.numItems += 1
+
+    def allocate(self):
+        newlength = 2 * self.size
+        newList = [None] * newlength
+        for i in range(self.numItems):
+            newList[i] = self.items[i]
+        self.items = newList
+        self.size = newlength
+
+    def insert(self, i, x):
+        if self.numItems == self.size:
+            self.allocate()
+        if i < self.numItems:
+            for j in range(self.numItems - 1, i, -1):
+                self.items[j + 1] = self.items[j]
+            self.items[i] = x
+            self.numItems += 1
+        else:
+            self.append(x)
+
+    def __add__(self, other):
+        result = PyList(size=self.numItems + other.numItems)
+        for i in range(self.numItems):
+            result.append(self.items[i])
+        for i in range(other.numItems):
+            result.append(other.items[i])
+        return result
+
+    def delete(self, index):
+        if self.numItems == self.size / 4:
+            self.deallocate()
+        if index <= self.numItems:
+            for j in range(index, self.numItems - 2):
+                self.items[j] = self.items[j + 1]
+            self.numItems -= 1
+        else:
+            raise IndexError("PyList index out of range")
+
+    def deallocate(self):
+        newlength = self.size / 2
+        newList = [None] * newlength
+        for i in range(self.numItems):
+            newList[i] = self.items[i]
+        self.items = newList
+        self.size = newlength
+
+    def __contains__(self, item):
+        for i in range(self.numItems):
+            if self.items[i] == item:
+                return True
+            return False
+
+    def __eq__(self, other):
+        if type(other) != type(self):
+            return False
+        if self.numItems != other.numItems:
+            return False
+        for i in range(self.numItems):
+            if self.items[i] != self.items[i]:
+                return False
+            return True
+
+    def qsort(self):
+        if self.numItems <= 1:
+            return self
+        pivot = self.items[0]
+        list1 = PyList([], self.numItems)
+        listp = PyList([], self.numItems)
+        list2 = PyList([], self.numItems)
+        for i in range(self.numItems):
+            if self.items[i] < pivot:
+                list1.append(self.items[i])
+            else:
+                if self.items[i] == pivot:
+                    listp.append(self.items[i])
+                else:
+                    list2.append(self.items[i])
+        slist1 = list1.qsort()
+        slist2 = list2.qsort()
+        outlist = slist1 + listp + slist2
+        return outlist
+
+    def radixSort(self, numdigits, digits):
+        sortedlist = self
+        for i in range(numdigits):
+            sortedlist = sortedlist.Ksort(i, digits)
+        return sortedlist
+
+    def Ksort(self, round, digits):
+        bucket = PyList([], digits)
+        for k in range(digits):
+            newlist = PyList([], self.numItems)
+            bucket.append(newlist)
+        for i in range(self.numItems):
+            item = self.items[i]
+            item1 = item // (digits ** round) % digits
+            bucket[item1].append(item)
+        result = bucket[0]
+        for k in range(digits - 1):
+            result = result + bucket[k + 1]
+        return result
