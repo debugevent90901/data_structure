@@ -552,9 +552,12 @@ g.deleteVertex(1)
 g.deleteVertex(7)
 g.insertEdge((1,7))
 g.deleteEdge((1,2))
+print(g.vertexList)
+print(g.)
+'''
 print(g.connectedComponents())
-
 ass = [(1, 0), (2, 3), (3, 4)]
 a = Graph(ass)
 v = a.connectedComponents()
 print(v)
+'''
